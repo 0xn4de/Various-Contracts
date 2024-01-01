@@ -54,7 +54,7 @@ contract WannaBet {
     }
     function settleBet(uint256 betId) external {
         BetData storage bet = bets[betId];
-        require(bet.ends < block.timestamp, "Bet hasn't ended");
+        require(bet.ends < block.timestamp, "Bet has not ended");
         require(!bet.settledOrClosed, "Bet closed/settled");
         int price = getPrice();
         address winner;
