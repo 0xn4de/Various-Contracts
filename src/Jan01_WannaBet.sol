@@ -46,14 +46,14 @@ contract WannaBet {
 
     }
     function acceptBet(uint256 betId) external payable {
-        BetData memory bet = bets[betId];
+        BetData storage bet = bets[betId];
         require(bet.takerDeadline > block.timestamp, "Too late, bet closed");
         require(bet.taker == address(0), "Someone already bet");
         require(bet.takerBet == msg.value, "You bet too little/too much");
         bet.taker = msg.sender;
     }
     function settleBet(uint256 betId) external {
-        BetData memory bet = bets[betId];
+        BetData storage bet = bets[betId];
         require(bet.ends < block.timestamp, "Bet hasn't ended");
         require(!bet.settledOrClosed, "Bet closed/settled");
         int price = getPrice();
@@ -70,7 +70,7 @@ contract WannaBet {
         emit betSettled(winner, pot, betId);
     }
     function closeBet(uint256 betId) external {
-        BetData memory bet = bets[betId];
+        BetData storage bet = bets[betId];
         require(!bet.settledOrClosed, "Bet closed/settled");
         require(bet.takerDeadline < block.timestamp, "Too early");
         require(bet.taker == address(0), "Bet already accepted");
