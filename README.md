@@ -18,6 +18,11 @@ This repository uses [Foundry](https://book.getfoundry.sh/)
   - Bob wants to bet that ETH price is 2% higher in a month, he calls `createBet` with variables like price, if he's taking over/under, what odds hes giving himself (e.g. 1 ETH bet for 0.2 ETH on taker's side), settle time, time given for anyone to accept
   - If nobody accepts bet, he can withdraw after the time he set for someone to accept
   - If accepted, once the time is up, anyone can call `settleBet` and the contract checks Chainlink for the current price and sends funds accordingly
+- [BullToken](https://github.com/0xn4de/A-Contract-A-Day/blob/main/src/Jan02_BullToken.sol)
+  - ERC20 built on [Solmate's ERC20](https://github.com/transmissions11/solmate/blob/main/src/tokens/ERC20.sol) where transfers can only happen when ETH (or other) price is up since last update (weekly, automatic on transfer)
+  - Contract gets deployed with ETH as the feed, constructor checks current price and sets it in the contract (minPrice) along with last updated time (lastUpdated)
+  - When transfers happen, the **current** price (per Chainlink) has to be above the minPrice
+  - If a week has passed since `lastUpdated` was updated, contract fetches a new price during a transfer call and updates the data
 
 </details>
 
@@ -26,5 +31,5 @@ This repository uses [Foundry](https://book.getfoundry.sh/)
 Add an Ethereum RPC URL to .env
 
 ```shell
-forge test --match-path test/{ContractGoesHere}.sol  -vv
+forge test --match-path test/{ContractGoesHere}.t.sol  -vv
 ```
