@@ -39,6 +39,7 @@ contract WannaBet {
     function createBet(int256 price, Side side, uint256 ends, uint256 takerDeadline, uint256 takerBet) external payable returns (uint256 betId) {
         require(msg.value > 0, "No ETH Bet");
         require(ends > block.timestamp, "Bet end is in the past");
+        require(takerDeadline > block.timestamp && takerDeadline < ends, "Taker deadline cannot be in the past nor after settling timestamp");
         ++wagers;
         bets[wagers] = BetData(address(0), msg.sender, side, msg.value, takerBet, ends, takerDeadline, price, false);
         emit betCreated(msg.sender, price, wagers, ends, takerDeadline, takerBet, side);
