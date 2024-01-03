@@ -3,14 +3,13 @@ pragma solidity ^0.8.0;
 
 import "solmate/tokens/ERC721.sol";
 import "openzeppelin-contracts/contracts/utils/Strings.sol";
-import "openzeppelin-contracts/contracts/access/Ownable.sol";
 
 error MintPriceNotPaid();
 error MaxSupply();
 error NonExistentTokenURI();
 error WithdrawTransfer();
 
-contract NFT is ERC721, Ownable {
+contract FreeForAll is ERC721 {
 
     using Strings for uint256;
     uint256 public currentTokenId;
@@ -46,6 +45,11 @@ contract NFT is ERC721, Ownable {
         return Strings.toString(tokenId);
     }
     function transferFrom(address from, address to, uint256 id) public virtual override {
+        // Few troubles arise:
+        // If it has been more than 24 (but less than 25) hours since the last time someone called transferFrom
+        // After the last FFA period, it won't register as being FFA, you will have to call again
+        // If it has been over 25 hours, startTime will get set to startTime + 24 hours every time transferFrom is called
+        // meaning it will have to be looped over until it's back on track (send NFT from bob to alice, then alice to bob etc)
         if (block.timestamp < startTime + 1 hours && block.timestamp > startTime) {
             // Impl. lifted from https://github.com/transmissions11/solmate/blob/main/src/tokens/ERC721.sol#L98-#L106
             require(from == _ownerOf[id], "WRONG_FROM");
