@@ -25,7 +25,7 @@ This repository uses [Foundry](https://book.getfoundry.sh/)
   - If a week has passed since `lastUpdated` was updated, contract fetches a new price during a transfer call and updates the data
 - [FreeForAll](https://github.com/0xn4de/A-Contract-A-Day/blob/main/src/Jan03_FreeForAll.sol)
   - ERC721 built on [Solmate's ERC721](https://github.com/transmissions11/solmate/blob/main/src/tokens/ERC721.sol) where you can take others NFT's during a 1-hour period every single day
-  - Every 24 hours, `transferFrom` is allowed to be called by anyone for anyone's tokenId
+  - Every 24 hours, `transferFrom` is allowed to be called (**for 1 hour**) by anyone for anyone's tokenId
   - startTime is at the same time every day, but if no transfers happen in the 23 hours beforehand, `transferFrom` will need to be called (with a legitimate transfer)
 
 </details>
