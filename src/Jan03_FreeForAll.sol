@@ -19,9 +19,9 @@ contract NFT is ERC721, Ownable {
 
     constructor(
         string memory _name,
-        string memory _symbol,
+        string memory _symbol
     ) ERC721(_name, _symbol) {
-        startTime = block.timestamp + 1 day;
+        startTime = block.timestamp + 1 days;
     }
 
     function mintTo(address recipient) public returns (uint256) {
@@ -46,7 +46,7 @@ contract NFT is ERC721, Ownable {
         return Strings.toString(tokenId);
     }
     function transferFrom(address from, address to, uint256 id) public virtual override {
-        if (block.timestamp < startTime + 1 hour && block.timestamp > startTime) {
+        if (block.timestamp < startTime + 1 hours && block.timestamp > startTime) {
             // Impl. lifted from https://github.com/transmissions11/solmate/blob/main/src/tokens/ERC721.sol#L98-#L106
             require(from == _ownerOf[id], "WRONG_FROM");
             unchecked {
@@ -57,7 +57,7 @@ contract NFT is ERC721, Ownable {
             _ownerOf[id] = to;
             delete getApproved[id];
         } else {
-            startTime = block.timestamp > startTime + 1 hour ? startTime + 1 day : startTime
+            startTime = block.timestamp > startTime + 1 hours ? startTime + 1 days : startTime;
             super.transferFrom(from, to, id);
         }
     }
