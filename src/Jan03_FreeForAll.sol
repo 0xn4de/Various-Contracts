@@ -24,7 +24,7 @@ contract NFT is ERC721, Ownable {
         startTime = block.timestamp + 1 day;
     }
 
-    function mintTo(address recipient) public payable returns (uint256) {
+    function mintTo(address recipient) public returns (uint256) {
         uint256 newTokenId = ++currentTokenId;
         if (newTokenId > TOTAL_SUPPLY) {
             revert MaxSupply();
