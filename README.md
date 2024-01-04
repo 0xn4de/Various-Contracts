@@ -27,6 +27,10 @@ This repository uses [Foundry](https://book.getfoundry.sh/)
   - ERC721 built on [Solmate's ERC721](https://github.com/transmissions11/solmate/blob/main/src/tokens/ERC721.sol) where you can take others NFT's during a 1-hour period every single day
   - Every 24 hours, `transferFrom` is allowed to be called (**for 1 hour**) by anyone for anyone's tokenId
   - startTime is at the same time every day, but if no transfers happen in the 23 hours beforehand, `transferFrom` will need to be called (with a legitimate transfer)
+- [FreeForAllToken](https://github.com/0xn4de/A-Contract-A-Day/blob/main/src/Jan04_FreeForAllToken.sol)
+  - ERC20 built on [Solmate's ERC20](https://github.com/transmissions11/solmate/blob/main/src/tokens/ERC20.sol) where you can take others tokens during a 1-hour period every single day, similar to FreeForAll.sol
+  - Every 24 hours, `transferFrom` is allowed to be called (**for 1 hour**) by anyone for anyone's tokens
+  - startTime is at the same time every day, but if no transfers happen in the 23 hours beforehand, `transferFrom` will need to be called (with a legitimate transfer)
 
 </details>
 
