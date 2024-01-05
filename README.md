@@ -31,6 +31,8 @@ This repository uses [Foundry](https://book.getfoundry.sh/)
   - ERC20 built on [Solmate's ERC20](https://github.com/transmissions11/solmate/blob/main/src/tokens/ERC20.sol) where you can take others tokens during a 1-hour period every single day, similar to FreeForAll.sol
   - Every 24 hours, `transferFrom` is allowed to be called (**for 1 hour**) by anyone for anyone's tokens
   - startTime is at the same time every day, but if no transfers happen in the 23 hours beforehand, `transferFrom` will need to be called (with a legitimate transfer)
+- [FreeForAll1155](https://github.com/0xn4de/A-Contract-A-Day/blob/main/src/Jan05_FreeForAll1155.sol)
+  - ERC155 built on [Solmate's ERC1155](https://github.com/transmissions11/solmate/blob/main/src/tokens/ERC1155.sol) where you can take others tokens during a 1-hour period every single day, (basically) identical to FreeForAll.sol
 
 </details>
 
