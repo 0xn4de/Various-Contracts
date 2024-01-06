@@ -32,7 +32,15 @@ This repository uses [Foundry](https://book.getfoundry.sh/)
   - Every 24 hours, `transferFrom` is allowed to be called (**for 1 hour**) by anyone for anyone's tokens
   - startTime is at the same time every day, but if no transfers happen in the 23 hours beforehand, `transferFrom` will need to be called (with a legitimate transfer)
 - [FreeForAll1155](https://github.com/0xn4de/A-Contract-A-Day/blob/main/src/Jan05_FreeForAll1155.sol)
-  - ERC155 built on [Solmate's ERC1155](https://github.com/transmissions11/solmate/blob/main/src/tokens/ERC1155.sol) where you can take others tokens during a 1-hour period every single day, (basically) identical to FreeForAll.sol
+  - ERC1155 built on [Solmate's ERC1155](https://github.com/transmissions11/solmate/blob/main/src/tokens/ERC1155.sol) where you can take others tokens during a 1-hour period every single day, (basically) identical to FreeForAll.sol
+- [ERC1155Vault](https://github.com/0xn4de/A-Contract-A-Day/blob/main/src/Jan06_ERC1155Vault.sol)
+  - An ERC4626-like MultiVault that allows you to create a vault that accepts a certain tokenId of an ERC1155 and will give you an ERC1155 of specific tokenId in return
+  - Base from [z0r0z's](https://twitter.com/z0r0zzz) [MultiVault](https://github.com/z0r0z/MultiVault/) which allows you to deposit an ERC20 and get an ERC1155 in return
+  - How it works:
+    - `create(erc1155, tokenid)` will allow you to create a vault for a specific ERC1155 contract's tokenId, e.g. a vault for `tokenId` 5 from a random ERC1155
+    - Allows you to deposit any amount of that specific tokenId and then gives you an ERC1155 with a tokenId that is used only for that specific tokenId
+    - Redeem your given ERC1155 and get your original NFT with tokenId 5 back
+  - Undertested, exercise caution
 
 </details>
 
