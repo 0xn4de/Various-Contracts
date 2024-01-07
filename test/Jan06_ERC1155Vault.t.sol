@@ -5,7 +5,7 @@ import {MockERC1155} from "solmate/test/utils/mocks/MockERC1155.sol";
 import "forge-std/Test.sol";
 import {MockERC1155Vault} from "./mocks/MockERC1155Vault.sol";
 
-contract ERC4626Test is Test {
+contract ERC1155VaultTest is Test {
     MockERC1155 underlying;
     MockERC1155 underlying2;
     MockERC1155 underlying3;
