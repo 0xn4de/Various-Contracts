@@ -8,7 +8,6 @@ import {MockERC20} from "solmate/test/utils/mocks/MockERC20.sol";
 contract MarketTest is Test {
     address alice;
     address bob;
-    address charlie;
     MockERC20 token;
     MockERC20 token2;
 
@@ -20,13 +19,10 @@ contract MarketTest is Test {
         token2 = new MockERC20("TestToken2", "TEST2", 18);
         alice = makeAddr("alice");
         bob = makeAddr("bob");
-        charlie = makeAddr("charlie");
         vm.deal(alice, 1 ether);
         vm.deal(bob, 1 ether);
-        vm.deal(charlie, 1 ether);
-        deal(address(token), alice, 1000*1e18);
-        deal(address(token2), bob, 1000*1e18);
-        deal(address(token), charlie, 1000*1e18);
+        deal(address(token2), alice, 1000*1e18);
+        deal(address(token), bob, 1000*1e18);
         vm.prank(bob);
         token.approve(address(market), type(uint256).max);
         vm.prank(alice);
@@ -61,10 +57,11 @@ contract MarketTest is Test {
         assertEq(address(bob).balance, 0.5 ether);
         assertEq(address(alice).balance, 1 ether);
         
-        vm.prank(alice);
+        vm.startPrank(alice);
         vm.expectRevert("No ETH sent");
         market.acceptTrade(tradeId);
         market.acceptTrade{value: 0.45 ether}(tradeId);
+        vm.stopPrank();
         
         assertEq(address(bob).balance, 0.95 ether);
         assertEq(address(alice).balance, 1.05 ether);
@@ -92,14 +89,14 @@ contract MarketTest is Test {
         uint256 tradeId = market.createTrade(address(token), 100*1e18, address(0), 0.5 ether, uint32(block.timestamp)+1);
         
         assertEq(token.balanceOf(alice), 0);
-        assertEq(token.balanceOf(bob), 1000);
+        assertEq(token.balanceOf(bob), 1000*1e18);
         uint256 bobEthBefore = bob.balance;
         
         vm.prank(alice);
-        market.acceptTrade(tradeId);
+        market.acceptTrade{value:0.5 ether}(tradeId);
         
-        assertEq(token.balanceOf(alice), 100);
-        assertEq(token.balanceOf(bob), 900);
+        assertEq(token.balanceOf(alice), 100*1e18);
+        assertEq(token.balanceOf(bob), 900*1e18);
         assertEq(bob.balance-bobEthBefore, 0.5 ether); // gained .5 eth
     }
     function testCancelTradeETH() public {
