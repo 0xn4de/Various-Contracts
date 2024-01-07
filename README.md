@@ -41,6 +41,12 @@ This repository uses [Foundry](https://book.getfoundry.sh/)
     - Allows you to deposit any amount of that specific tokenId and then gives you an ERC1155 with a tokenId that is used only for that specific tokenId
     - Redeem your given ERC1155 and get your original NFT with tokenId 5 back
   - Undertested, exercise caution
+- [Market](https://github.com/0xn4de/A-Contract-A-Day/blob/main/src/Jan07_Market.sol)
+  - Market for ERC20s and ETH, allows anyone to create a trade where they set out how much of what they want to buy and how much of what they give in return
+  - Allows setting a deadline timestamp for trades
+  - Cancellable orders with `cancelTrade(id)`
+  - Call `createTrade` with relevant data (zero address for ETH asset)
+  - Accept trade with `acceptTrade(id)`, will distribute assets accordingly
 
 </details>
 
