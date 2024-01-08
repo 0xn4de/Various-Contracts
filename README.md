@@ -47,6 +47,12 @@ This repository uses [Foundry](https://book.getfoundry.sh/)
   - Cancellable orders with `cancelTrade(id)`
   - Call `createTrade` with relevant data (zero address for ETH asset)
   - Accept trade with `acceptTrade(id)`, will distribute assets accordingly
+- [NFTMarket](https://github.com/0xn4de/A-Contract-A-Day/blob/main/src/Jan08_NFTMarket.sol)
+  - Market for ERC721s, allows anyone to create a trade to swap ERC721<>ERC721
+  - Allows setting a deadline timestamp for trades
+  - Cancellable orders with `cancelTrade(id)`
+  - Call `createTrade` with relevant data, incl. the tokenIds you want to sell (can't yet specify what ids you want to buy)
+  - Accept trade with `acceptTrade(id, [idsYouWantToSellInReturn])`, will distribute assets accordingly
 
 </details>
 
