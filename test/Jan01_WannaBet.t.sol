@@ -6,14 +6,14 @@ import "forge-std/console.sol";
 import {WannaBet, Side, BetData, AggregatorV3Interface} from "../src/Jan01_WannaBet.sol";
 contract WannaBetTest is Test {
     WannaBet public betContract;
-    AggregatorV3Interface priceFeed;
+    // AggregatorV3Interface priceFeed;
     address alice;
     address bob;
     address charlie;
     function setUp() public {
         vm.createSelectFork(vm.rpcUrl('mainnet'), 18800000); // ETH Price 2254.51
         betContract = new WannaBet(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
-        priceFeed = AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
+        // priceFeed = AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
         alice = makeAddr("alice");
         bob = makeAddr("bob");
         charlie = makeAddr("charlie");
