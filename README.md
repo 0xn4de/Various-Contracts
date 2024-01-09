@@ -53,6 +53,11 @@ This repository uses [Foundry](https://book.getfoundry.sh/)
   - Cancellable orders with `cancelTrade(id)`
   - Call `createTrade` with relevant data, incl. the tokenIds you want to sell (can't yet specify what ids you want to buy)
   - Accept trade with `acceptTrade(id, [idsYouWantToSellInReturn])`, will distribute assets accordingly
+- [WannaBetV2](https://github.com/0xn4de/A-Contract-A-Day/blob/main/src/Jan09_WannaBetV2.sol)
+  - Similar to WannaBet (check first contract)
+  - Added functionality of being able to wager tokens instead of just ETH
+  - Bets can be token-token, token-eth, eth-token, eth-eth
+  - Maker sets how much of what they are depositing and then sets how much they want the taker to deposit and of what currency (e.g. Bet that ETH is above 2500 on February 12th, 1000 USDT for your 0.4 ETH, if I win I get your ETH)
 
 </details>
 
