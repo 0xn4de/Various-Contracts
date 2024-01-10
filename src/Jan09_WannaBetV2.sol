@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/FeedRegistryInterface.sol";
 import {SafeTransferLib} from "solmate/utils/SafeTransferLib.sol";
 import {ERC20} from "solmate/tokens/ERC20.sol";
 enum Side {
@@ -26,7 +26,10 @@ struct BetData {
 contract WannaBetV2 {
     using SafeTransferLib for ERC20;
 
-    AggregatorV3Interface public immutable priceFeed;
+    FeedRegistryInterface public immutable registry;
+    address public immutable base;
+    address public immutable quote;
+
 
     uint256 wagers = 0;
 
@@ -35,8 +38,10 @@ contract WannaBetV2 {
     event betCreated(address indexed maker, int256 indexed price, uint256 indexed betId, BetTokenData tokenData, uint256 ends, uint256 takerDeadline, Side side);
     event betSettled(address indexed winner, uint256 indexed betId, address token1, uint256 amount1, address token2, uint256 amount2);
     
-    constructor(address _priceFeed) {
-        priceFeed = AggregatorV3Interface(_priceFeed);
+    constructor(address _base, address _quote, FeedRegistryInterface _registry) {
+        registry = _registry;
+        base = _base;
+        quote = _quote;
     }
 
     function createBet(int256 price, Side side, BetTokenData calldata tokenData, uint256 ends, uint256 takerDeadline) external payable returns (uint256 betId) {
@@ -105,7 +110,7 @@ contract WannaBetV2 {
         }
     }
     function getPrice() public view returns (int) {
-        (,int price,,,) = priceFeed.latestRoundData();
+        (,int price,,,) = registry.latestRoundData(base, quote);
         return price;
     }
 }

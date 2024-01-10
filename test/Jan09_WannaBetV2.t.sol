@@ -3,8 +3,9 @@ pragma solidity ^0.8.13;
 
 import {Test, console2} from "forge-std/Test.sol";
 import "forge-std/console.sol";
-import {WannaBetV2, Side, BetTokenData, AggregatorV3Interface} from "../src/Jan09_WannaBetV2.sol";
+import {WannaBetV2, Side, BetTokenData} from "../src/Jan09_WannaBetV2.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/FeedRegistryInterface.sol";
 
 
 contract WannaBetV2Test is Test {
@@ -15,7 +16,7 @@ contract WannaBetV2Test is Test {
     IERC20 usdc;
     function setUp() public {
         vm.createSelectFork(vm.rpcUrl('mainnet'), 18800000); // ETH Price 2254.51
-        betContract = new WannaBetV2(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
+        betContract = new WannaBetV2(0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE, 0x0000000000000000000000000000000000000348, FeedRegistryInterface(0x47Fb2585D2C56Fe188D0E6ec628a38b74fCeeeDf));
         usdc = IERC20(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48);
         alice = makeAddr("alice");
         bob = makeAddr("bob");
