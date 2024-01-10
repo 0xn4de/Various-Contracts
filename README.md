@@ -62,6 +62,7 @@ This repository uses [Foundry](https://book.getfoundry.sh/)
   - Factory contract for WannaBetV2 contracts
   - `deploy(base, quote)` takes in e.g. ETH & USD addresses (as per Chainlink definitions) and deploys a WannaBet contract for said pool
   - Pool can be used for price wagers as set out in WannaBetV2 description
+  - base and quote are needed instead of priceFeed because it's hard to verify (AFAIK) a legitimate Chainlink feed (perhaps with ENS names pointing to price feeds but unideal) and since the registry returns aggregator addresses instead of proxy addresses, they can't be called (for whatever reason) by an unauthorized address, making WannaBetV2 itself also rely on base and quote
 
 </details>
 
