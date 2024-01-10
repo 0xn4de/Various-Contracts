@@ -12,16 +12,13 @@ contract WannaBetFactoryTest is Test {
     WannaBetFactory public factory;
     address alice;
     address bob;
-    address charlie;
     function setUp() public {
         vm.createSelectFork(vm.rpcUrl('mainnet'), 18800000);
         factory = new WannaBetFactory(0x47Fb2585D2C56Fe188D0E6ec628a38b74fCeeeDf);
         alice = makeAddr("alice");
         bob = makeAddr("bob");
-        charlie = makeAddr("charlie");
         vm.deal(alice, 10 ether);
         vm.deal(bob, 10 ether);
-        vm.deal(charlie, 10 ether);
     }
 
     function testDeployPool() public {
