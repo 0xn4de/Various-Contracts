@@ -15,6 +15,7 @@ contract WannaBetFactory {
         feedRegistry = FeedRegistryInterface(_feedRegistry);
     }
     function deploy(address base, address quote) public returns (address) {
+        require(pools[base][quote] == address(0), "Pool already deployed");
         feedRegistry.getFeed(base, quote); // will revert if feed doesn't exist
         address pool = address(new WannaBetV2(base, quote, feedRegistry));
         pools[base][quote] = pool;

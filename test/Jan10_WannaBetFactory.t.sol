@@ -46,4 +46,10 @@ contract WannaBetFactoryTest is Test {
 
         assertEq(bob.balance, 11 ether);
     }
+    function testDeployingPoolTwiceReverts() public {
+        // deploy ETH-USD pool
+        factory.deploy(0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE,0x0000000000000000000000000000000000000348);
+        vm.expectRevert("Pool already deployed");
+        factory.deploy(0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE,0x0000000000000000000000000000000000000348);
+    }
 }
