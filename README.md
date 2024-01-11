@@ -63,6 +63,11 @@ This repository uses [Foundry](https://book.getfoundry.sh/)
   - `deploy(base, quote)` takes in e.g. ETH & USD addresses (as per Chainlink definitions) and deploys a WannaBet contract for said pool
   - Pool can be used for price wagers as set out in WannaBetV2 description
   - base and quote are needed instead of priceFeed because it's hard to verify (AFAIK) a legitimate Chainlink feed (perhaps with ENS names pointing to price feeds but unideal) and since the registry returns aggregator addresses instead of proxy addresses, they can't be called (for whatever reason) by an unauthorized address, making WannaBetV2 itself also rely on base and quote
+- [NFTAuction](https://github.com/0xn4de/A-Contract-A-Day/blob/main/src/Jan11_NFTAuction.sol)
+  - Basic auction contract for ERC721 and [ERC6909](https://eips.ethereum.org/EIPS/eip-6909), allows a seller to put an NFT on auction and set a reserve, minimum raise and a buy now price, in ETH
+  - If the value sent with `bid` exceeds buyNow, auction gets settled immediately
+  - If the auction does not meet the reserve, bid and NFT gets returned
+  - This contract is **_severely undertested_** and is far from a perfect implementation, hence subject to multiple attack vectors
 
 </details>
 
