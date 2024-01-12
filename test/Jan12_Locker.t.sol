@@ -24,14 +24,8 @@ contract LockerTest is Test {
         vm.deal(alice, 10 ether);
         vm.deal(bob, 10 ether);
         vm.deal(charlie, 10 ether);
-        deal(address(usdc), alice, 10000*1e6);
         deal(address(usdc), bob, 10000*1e6);
-        deal(address(usdc), charlie, 10000*1e6);
-        vm.prank(alice);
-        usdc.approve(address(locker), type(uint256).max);
         vm.prank(bob);
-        usdc.approve(address(locker), type(uint256).max);
-        vm.prank(charlie);
         usdc.approve(address(locker), type(uint256).max);
         vm.makePersistent(address(usdc));
 
@@ -107,6 +101,6 @@ contract LockerTest is Test {
 
         vm.prank(charlie);
         locker.withdraw(vestingId);
-        assertEq(usdc.balanceOf(charlie), 11000*1e6);
+        assertEq(usdc.balanceOf(charlie), 1000*1e6);
     }
 }
