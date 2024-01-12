@@ -68,6 +68,11 @@ This repository uses [Foundry](https://book.getfoundry.sh/)
   - If the value sent with `bid` exceeds buyNow, auction gets settled immediately
   - If the auction does not meet the reserve, bid and NFT gets returned
   - This contract is **_severely undertested_** and is far from a perfect implementation, hence subject to multiple attack vectors
+- [Locker](https://github.com/0xn4de/A-Contract-A-Day/blob/main/src/Jan12_Locker.sol)
+  - Basic vesting contract for ERC20 & ETH
+  - Call `deposit` with relevant data (token (0x0 for eth), amount, vestingLength, beneficiary)
+  - Beneficiary can withdraw once vesting has ended
+  - Beneficiary can change the beneficiary using `changeBeneficiary`
 
 </details>
 
