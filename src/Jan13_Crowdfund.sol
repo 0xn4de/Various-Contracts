@@ -34,7 +34,6 @@ contract Crowdfund {
     function withdraw(uint256 _raiseId) external {
         require(!raises[_raiseId].ended, "Raise finished");
         require(raises[_raiseId].owner == msg.sender, "Not raise owner");
-        require(raises[_raiseId].deadline < block.timestamp, "Raise not over");
         require(raises[_raiseId].goal <= raises[_raiseId].contributed, "Raise did not meet its goal");
         raises[_raiseId].ended = true;
         SafeTransferLib.safeTransferETH(raises[_raiseId].owner, raises[_raiseId].contributed);

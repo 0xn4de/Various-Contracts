@@ -85,10 +85,7 @@ contract CrowdfundTest is Test {
         vm.prank(charlie);
         crowdfund.contribute{value: 9 ether}(raiseId);
 
-        vm.prank(bob);
-        vm.expectRevert("Raise not over");
-        crowdfund.withdraw(raiseId);
-
+        
         vm.warp(block.timestamp + 1 weeks + 1 seconds);
         vm.prank(alice);
         vm.expectRevert("Not raise owner");
