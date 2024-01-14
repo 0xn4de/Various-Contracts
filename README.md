@@ -78,6 +78,10 @@ This repository uses [Foundry](https://book.getfoundry.sh/)
   - Calling `createRaise(goal, length, owner)` will create a raise with a set goal and deadline
   - People can contribute by calling `contribute(raiseId)`
   - If goal is met, owner can withdraw, if not, contributors can withdraw (after deadline)
+- [Prediction](https://github.com/0xn4de/A-Contract-A-Day/blob/main/src/Jan14_Prediction.sol)
+  - A **very** basic implementation of an idea inspired by [horsefacts](https://twitter.com/eth_call/status/1609463639399956482)
+  - Call `createPrediction(keccak256("This is my prediction for 2024"))` to save prediction
+  - Call `revealPrediction(predId, "This is my prediction for 2024")` to reveal prediction
 
 </details>
 
