@@ -2,6 +2,8 @@
 pragma solidity ^0.8.13;
 
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import {SafeTransferLib} from "solmate/utils/SafeTransferLib.sol";
+
 enum Side {
     UNDER, OVER
 }
@@ -18,7 +20,7 @@ struct BetData {
 }
 contract WannaBet {
     AggregatorV3Interface public immutable priceFeed;
-    uint256 wagers = 0;
+    uint256 wagers;
     mapping (uint256 => BetData) public bets;
     event betCreated(address indexed maker, int256 indexed price, uint256 indexed betId, uint256 ends, uint256 takerDeadline, uint256 takerBet, Side side);
     event betSettled(address indexed winner, uint256 indexed pot, uint256 indexed betId);
@@ -33,7 +35,6 @@ contract WannaBet {
         bets[wagers] = BetData(address(0), msg.sender, side, msg.value, takerBet, ends, takerDeadline, price, false);
         emit betCreated(msg.sender, price, wagers, ends, takerDeadline, takerBet, side);
         return wagers;
-
     }
     function acceptBet(uint256 betId) external payable {
         BetData storage bet = bets[betId];
@@ -55,8 +56,7 @@ contract WannaBet {
             winner = bet.taker;
         }
         bet.settledOrClosed = true;
-        (bool success,) = payable(winner).call{value: pot}("");
-        require(success, "Unsuccessful transfer");
+        SafeTransferLib.safeTransferETH(winner, pot);
         emit betSettled(winner, pot, betId);
     }
     function closeBet(uint256 betId) external {
@@ -67,8 +67,7 @@ contract WannaBet {
         uint256 amountToRefund = bet.makerBet;
         address maker = bet.maker;
         bet.settledOrClosed = true;
-        (bool success,) = payable(maker).call{value: amountToRefund}("");
-        require(success, "Unsuccessful transfer");
+        SafeTransferLib.safeTransferETH(maker, amountToRefund);
     }
     function getPrice() public view returns (int) {
         (,int price,,,) = priceFeed.latestRoundData();
