@@ -49,28 +49,13 @@ contract BullToken is ERC20 {
         address to,
         uint256 amount
     ) public virtual override returns (bool) {
-        uint256 allowed = allowance[from][msg.sender]; // Saves gas for limited approvals.
-
-        if (allowed != type(uint256).max) allowance[from][msg.sender] = allowed - amount;
-
-        balanceOf[from] -= amount;
-
         int256 price = getPrice();
         if (block.timestamp > lastUpdated + 7 days) {
             minPrice = price;
             lastUpdated = block.timestamp;
         }
         require(price >= minPrice, "Price is too low");
-
-        // Cannot overflow because the sum of all user
-        // balances can't exceed the max uint256 value.
-        unchecked {
-            balanceOf[to] += amount;
-        }
-
-        emit Transfer(from, to, amount);
-
-        return true;
+        return super.transferFrom(from, to, amount);
     }
     function getPrice() public view returns (int) {
         (,int price,,,) = priceFeed.latestRoundData();
