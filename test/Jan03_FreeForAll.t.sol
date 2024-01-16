@@ -147,17 +147,17 @@ contract FreeForAllTest is Test {
     function test_tokenURIRevert() public {
         nft.mintTo(address(bob));
         vm.expectRevert("NOT_MINTED");
-        string memory token = nft.tokenURI(555);
+        nft.tokenURI(555);
     }
 }
 
 contract Receiver is ERC721TokenReceiver {
     function onERC721Received(
-        address operator,
-        address from,
-        uint256 id,
-        bytes calldata data
-    ) external override returns (bytes4) {
+        address /* operator */ ,
+        address /* from */,
+        uint256 /* id */,
+        bytes calldata /* data */
+    ) external pure override returns (bytes4) {
         return this.onERC721Received.selector;
     }
 }
