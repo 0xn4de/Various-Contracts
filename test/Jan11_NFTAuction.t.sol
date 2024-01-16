@@ -9,7 +9,6 @@ import {MockERC6909} from "solmate/test/utils/mocks/MockERC6909.sol";
 contract NFTAuctionTest is Test {
     address alice;
     address bob;
-    address charlie;
     MockERC721 nft;
     MockERC6909 nft2;
 
@@ -22,10 +21,8 @@ contract NFTAuctionTest is Test {
 
         alice = makeAddr("alice");
         bob = makeAddr("bob");
-        charlie = makeAddr("charlie");
         vm.deal(alice, 10 ether);
         vm.deal(bob, 10 ether);
-        vm.deal(charlie, 10 ether);
 
         nft.mint(alice, 1);
         nft2.mint(alice, 1, 5);
