@@ -12,7 +12,6 @@ contract ERC1155VaultTest is Test {
     MockERC1155Vault vault;
     address alice;
     address bob;
-    address charlie;
 
     function setUp() public {
         underlying = new MockERC1155();
@@ -21,7 +20,6 @@ contract ERC1155VaultTest is Test {
         vault = new MockERC1155Vault();
         alice = makeAddr("alice");
         bob = makeAddr("bob");
-        charlie = makeAddr("charlie");
         vault.create(underlying, 1);
         vault.create(underlying2, 1);
         vault.create(underlying3, 1);

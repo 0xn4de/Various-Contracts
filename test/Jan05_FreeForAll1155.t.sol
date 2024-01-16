@@ -8,7 +8,6 @@ contract FreeForAll1155Test is Test {
     using stdStorage for StdStorage;
     address alice;
     address bob;
-    address charlie;
 
     FreeForAll1155 private nft;
 
@@ -17,7 +16,6 @@ contract FreeForAll1155Test is Test {
         nft = new FreeForAll1155();
         alice = makeAddr("alice");
         bob = makeAddr("bob");
-        charlie = makeAddr("charlie");
     }
 
     function test_correctStartTime() public {
