@@ -3,6 +3,7 @@
 This will be a collection of smart contracts I aim to create nearly every day, provided I have enough time and ideas
 
 Contracts are in src/, while the tests are in test/
+I've also started adding Vyper versions of contracts, those are in vyper_contracts/
 
 **If you have any ideas or questions, please hit me up on** [Twitter](https://twitter.com/0xf4d3)!
 
