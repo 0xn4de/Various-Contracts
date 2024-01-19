@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "forge-std/Test.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {Crowdfund} from "../src/Jan13_Crowdfund.sol";
+import {Crowdfund} from "../../src/Jan13_Crowdfund.sol";
 import "vyper/VyperDeployer.sol";
 
 contract CrowdfundTest is Test {

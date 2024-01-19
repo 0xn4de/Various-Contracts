@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "forge-std/Test.sol";
-import {Prediction} from "../src/Jan14_Prediction.sol";
+import {Prediction} from "../../src/Jan14_Prediction.sol";
 import "vyper/VyperDeployer.sol";
 
 contract PredictionTest is Test {
