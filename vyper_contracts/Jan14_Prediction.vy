@@ -23,5 +23,5 @@ def revealPrediction(_predId: uint256, prediction: String[100]) -> bool:
     assert p.pred == "", "Prediction already set"
     assert prediction != "", "Empty prediction"
     assert p.hash == keccak256(prediction), "Wrong reveal"
-    self.predictions[_predId].pred = prediction # p.pred = prediction doesn't change var? curious
+    self.predictions[_predId].pred = prediction
     return True
