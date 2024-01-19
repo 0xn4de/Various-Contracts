@@ -4,7 +4,9 @@ This will be a collection of smart contracts I aim to create nearly every day, p
 
 Contracts are in src/, while the tests are in test/
 
-I've also started adding Vyper versions of contracts (ran out of ideas), those are in vyper_contracts/
+I've also started adding Vyper versions of contracts (ran out of ideas), those are in vyper_contracts/ (s/o to [0xKitsune](https://github.com/0xKitsune/Foundry-Vyper))
+
+Same tests work for both Vyper & Solidity (where possible) with small modifications, Vyper tests are in test/vyper_tests/
 
 **If you have any ideas or questions, please hit me up on** [Twitter](https://twitter.com/0xf4d3)!
 
