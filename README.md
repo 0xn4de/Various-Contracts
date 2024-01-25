@@ -90,6 +90,7 @@ This repository uses [Foundry](https://book.getfoundry.sh/)
 </details>
 
 ## Testing
+You may have to [install Vyper](https://docs.vyperlang.org/en/v0.2.12/installing-vyper.html) (0.3.7)
 
 Add an Ethereum RPC URL to .env
 
