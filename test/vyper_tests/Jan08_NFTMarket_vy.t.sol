@@ -7,7 +7,7 @@ import {MockERC721} from "solmate/test/utils/mocks/MockERC721.sol";
 import "vyper/VyperDeployer.sol";
 
 interface INFTMarket {
-    // vyper does not have uint32 while NFTMarket.sol uses that
+    // Ran into an issue with uints like uint32, uint80 etc in my vyper install (unknown fix)
     // so have to redefine interface (more ideal ways of going about this probably)
     // market.createTrade is replaced with INFTMarket(address(market)).createTrade
     function createTrade(address, uint256[] calldata, address, uint256, uint256) external returns (uint256);
