@@ -20,19 +20,20 @@ struct BetData:
     takerDeadline: uint256
     price: int256
 
-registry: immutable(FeedRegistryInterface)
-base: immutable(address)
-quote: immutable(address)
+registry: public(FeedRegistryInterface)
+base: public(address)
+quote: public(address)
 wagers: public(uint256)
 bets: public(HashMap[uint256, BetData])
-
+initialized: public(bool)
 
 @external
-def __init__(_base: address, _quote: address, _registry: FeedRegistryInterface):
-    registry = _registry
-    base = _base
-    quote = _quote
-
+def initialize(_base: address, _quote: address, _registry: FeedRegistryInterface):
+    assert not self.initialized
+    self.registry = _registry
+    self.base = _base
+    self.quote = _quote
+    self.initialized = True
 @external
 @payable
 def createBet(price: int256, side: uint8, tokenData: BetTokenData, ends: uint256, takerDeadline: uint256) -> uint256:
@@ -110,5 +111,5 @@ def getPrice() -> int256:
     b: uint256 = 0
     c: uint256 = 0
     d: uint256 = 0
-    (a, price, b, c, d) = registry.latestRoundData(base, quote)
+    (a, price, b, c, d) = self.registry.latestRoundData(self.base, self.quote)
     return price

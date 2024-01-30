@@ -33,7 +33,11 @@ contract WannaBetV2Test is Test {
     function setUp() public {
         // vm.createSelectFork(vm.rpcUrl('mainnet'), 18800000); // ETH Price 2254.51
         registry = new FeedRegistryInterface();
-        betContract = WannaBetV2(vyperDeployer.deployContract("Jan09_WannaBetV2", abi.encode(eth, usd, registry)));
+        betContract = WannaBetV2(vyperDeployer.deployContract("Jan09_WannaBetV2"));
+        // create_forwarder_to wont allow init arguments
+        // don't mind the initialize call :p
+        (bool success,) = address(betContract).call(abi.encodeWithSelector(bytes4(keccak256("initialize(address,address,address)")), eth, usd, registry));
+        assert(success);
         usdc = IERC20(address(new MockERC20("testUSDC", "USDC", 6)));
         alice = makeAddr("alice");
         bob = makeAddr("bob");
