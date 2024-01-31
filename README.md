@@ -86,6 +86,11 @@ This repository uses [Foundry](https://book.getfoundry.sh/)
   - A **very** basic implementation of an idea inspired by [horsefacts](https://twitter.com/eth_call/status/1609463639399956482)
   - Call `createPrediction(keccak256("This is my prediction for 2024"))` to save prediction
   - Call `revealPrediction(predId, "This is my prediction for 2024")` to reveal prediction
+- [LockerToken](https://github.com/0xn4de/A-Contract-A-Day/blob/main/src/Jan31_LockerToken.sol)
+  - Nearly identical in behaviour to Locker
+  - Difference is that beneficiary is tracked through ownership of an ERC721 id that corresponds to the vesting data
+  - Transfer the ERC721 to another address to change beneficiary
+  - Token gets minted on deposit, burned on withdraw
 
 </details>
 
