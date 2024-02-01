@@ -15,6 +15,12 @@ totalTrades: public(uint256)
 
 trades: public(HashMap[uint256, Trade])
 
+event TradeCreated:
+    assetToSell: address
+    amountToSell: uint256
+    assetToBuy: address
+    amountToBuy: uint256
+    deadline: uint256
 
 @external
 @payable
@@ -33,6 +39,7 @@ def createTrade(assetToSell: address, amountToSell: uint256, assetToBuy: address
         amountToSell: amountToSell,
         amountToBuy: amountToBuy
     })
+    log TradeCreated(assetToSell, amountToSell, assetToBuy, amountToBuy, deadline)
     return self.totalTrades
 
 @external
