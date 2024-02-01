@@ -14,6 +14,13 @@ struct Trade:
 totalTrades: public(uint256)
 trades: public(HashMap[uint256, Trade])
 
+event TradeCreated:
+    nftToSell: address
+    tokensToSell: DynArray[uint256, 64]
+    nftToBuy: address
+    tokensToBuy: uint256
+    deadline: uint256
+
 @external
 def createTrade(nftToSell: address, tokensToSell: DynArray[uint256, 64], nftToBuy: address, tokensToBuy: uint256, deadline: uint256) -> uint256:
     assert deadline > block.timestamp, "Deadline is in the past"
@@ -28,6 +35,7 @@ def createTrade(nftToSell: address, tokensToSell: DynArray[uint256, 64], nftToBu
         tokensToBuy: tokensToBuy,
         tokensToSell: tokensToSell
     })
+    log TradeCreated(nftToSell, tokensToSell, nftToBuy, tokensToBuy, deadline)
     return self.totalTrades
 
 @external
