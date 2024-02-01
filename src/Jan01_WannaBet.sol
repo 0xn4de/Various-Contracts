@@ -24,6 +24,7 @@ contract WannaBet {
     mapping (uint256 => BetData) public bets;
     event betCreated(address indexed maker, int256 indexed price, uint256 indexed betId, uint256 ends, uint256 takerDeadline, uint256 takerBet, Side side);
     event betSettled(address indexed winner, uint256 indexed pot, uint256 indexed betId);
+    event betClosed(address indexed maker, uint256 indexed betId);
     constructor(address _priceFeed) {
         priceFeed = AggregatorV3Interface(_priceFeed);
     }
@@ -68,6 +69,7 @@ contract WannaBet {
         address maker = bet.maker;
         bet.settledOrClosed = true;
         SafeTransferLib.safeTransferETH(maker, amountToRefund);
+        emit betClosed(maker, betId);
     }
     function getPrice() public view returns (int) {
         (,int price,,,) = priceFeed.latestRoundData();

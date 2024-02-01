@@ -14,6 +14,21 @@ struct BetData:
     price: int256
     settledOrClosed: bool
 
+event betCreated:
+    maker: indexed(address)
+    price: indexed(int256)
+    betId: indexed(uint256)
+    ends: uint256
+    takerDeadline: uint256
+    takerBet: uint256
+    side: uint8
+event betSettled:
+    winner: indexed(address)
+    pot: indexed(uint256)
+    betId: indexed(uint256)
+event betClosed:
+    maker: indexed(address)
+    betId: indexed(uint256)
 
 priceFeed: public(AggregatorV3Interface)
 wagers: public(uint256)
@@ -49,6 +64,7 @@ def createBet(price: int256, side: uint8, ends: uint256, takerDeadline: uint256,
         price: price,
         settledOrClosed: False
     })
+    log betCreated(msg.sender, price, self.wagers, ends, takerDeadline, takerBet, side)
     return self.wagers
 
 @internal
@@ -83,6 +99,7 @@ def settleBet(betId: uint256):
         winner = bet.taker
     self.bets[betId].settledOrClosed = True
     raw_call(winner, b'', value=pot)
+    log betSettled(winner, pot, betId)
 @external
 def closeBet(betId: uint256):
     bet: BetData = self.bets[betId]
@@ -91,7 +108,7 @@ def closeBet(betId: uint256):
     assert bet.taker == empty(address), "Bet already accepted"
     self.bets[betId].settledOrClosed = True
     raw_call(bet.maker, b'', value=bet.makerBet)
-
+    log betClosed(bet.maker, betId)
 
 
     
