@@ -27,6 +27,22 @@ wagers: public(uint256)
 bets: public(HashMap[uint256, BetData])
 initialized: public(bool)
 
+event betCreated:
+    maker: indexed(address)
+    price: indexed(int256)
+    betId: indexed(uint256)
+    tokenData: BetTokenData
+    ends: uint256
+    takerDeadline: uint256
+    side: uint8
+event betSettled:
+    winner: indexed(address)
+    betId: indexed(uint256)
+    token1: address
+    amount1: uint256
+    token2: address
+    amount2: uint256
+
 @external
 def initialize(_base: address, _quote: address, _registry: FeedRegistryInterface):
     assert not self.initialized
@@ -55,6 +71,7 @@ def createBet(price: int256, side: uint8, tokenData: BetTokenData, ends: uint256
         takerDeadline: takerDeadline,
         price: price
     })
+    log betCreated(msg.sender, price, self.wagers, tokenData, ends, takerDeadline, side)
     return self.wagers
 
 @external
@@ -91,6 +108,7 @@ def settleBet(betId: uint256):
     else:
         ERC20(bet.tokenData.makerAsset).transfer(winner, bet.tokenData.makerBet)
         ERC20(bet.tokenData.takerAsset).transfer(winner, bet.tokenData.takerBet)
+    log betSettled(winner, betId, bet.tokenData.makerAsset, bet.tokenData.makerBet, bet.tokenData.takerAsset, bet.tokenData.takerBet)
 @external
 def closeBet(betId: uint256):
     bet: BetData = self.bets[betId]
