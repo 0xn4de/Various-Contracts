@@ -37,6 +37,14 @@ totalAuctions: public(uint256)
 
 auctions: public(HashMap[uint256, Auction])
 
+event auctionCreated:
+    nft: address
+    tokenId: uint256
+    reserve: uint256
+    minRaise: uint256
+    buyNow: uint256
+    deadline: uint256
+
 
 @external
 def createAuction(nft: address, tokenId: uint256, nftType: uint8, reserve: uint256, minRaise: uint256, buyNow: uint256, auctionLength: uint256) -> uint256:
@@ -66,6 +74,7 @@ def createAuction(nft: address, tokenId: uint256, nftType: uint8, reserve: uint2
         currentBid: 0,
         deadline: block.timestamp+auctionLength
     })
+    log auctionCreated(nft, tokenId, reserve, minRaise, buyNow, block.timestamp+auctionLength)
     return self.totalAuctions
 
 @external
