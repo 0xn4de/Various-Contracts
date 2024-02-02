@@ -13,6 +13,17 @@ vestingData: public(HashMap[uint256, VestingInfo])
 
 vestingId: public(uint256)
 
+event Deposit:
+    vestingId: indexed(uint256)
+    token: address
+    amount: uint256
+    vestingEndTime: uint256
+    beneficiary: indexed(address)
+event Withdraw:
+    vestingId: indexed(uint256)
+    token: address
+    amount: uint256
+    beneficiary: indexed(address)
 
 @external
 @payable
@@ -26,6 +37,7 @@ def deposit(_token: address, _amount: uint256, _vestingDuration: uint256, _benef
         ERC20(_token).transferFrom(msg.sender, self, _amount)
     
     self.vestingData[self.vestingId] = VestingInfo({token: _token, amount: _amount, vestingEndTime: vestingEndTime, beneficiary: _beneficiary, withdrawn:False})
+    log Deposit(self.vestingId, _token, _amount, vestingEndTime, _beneficiary)
     return self.vestingId
 
 @external
@@ -49,5 +61,6 @@ def withdraw(_vestingId: uint256):
         raw_call(msg.sender, b'', value=withdrawAmount)
     else:
         ERC20(self.vestingData[_vestingId].token).transfer(msg.sender, withdrawAmount)
+    log Withdraw(_vestingId, self.vestingData[_vestingId].token, self.vestingData[_vestingId].amount, msg.sender)
 
 
