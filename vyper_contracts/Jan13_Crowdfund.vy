@@ -24,24 +24,27 @@ def createRaise(goal: uint256, raiseLength: uint256, owner: address) -> uint256:
 @external
 @payable
 def contribute(_raiseId: uint256):
-    assert self.raises[_raiseId].owner != empty(address), "Raise does not exist"
-    assert self.raises[_raiseId].goal >= self.raises[_raiseId].contributed+msg.value, "Raise over goal"
-    assert self.raises[_raiseId].deadline > block.timestamp, "Raise over"
+    r: FundRaise = self.raises[_raiseId]
+    assert r.owner != empty(address), "Raise does not exist"
+    assert r.goal >= self.raises[_raiseId].contributed+msg.value, "Raise over goal"
+    assert r.deadline > block.timestamp, "Raise over"
     self.raises[_raiseId].contributed += msg.value
     self.contributors[msg.sender][_raiseId] += msg.value
 
 @external
 def withdraw(_raiseId: uint256):
-    assert not self.raises[_raiseId].ended, "Raise finished"
-    assert self.raises[_raiseId].owner == msg.sender, "Not raise owner"
-    assert self.raises[_raiseId].goal <= self.raises[_raiseId].contributed, "Raise did not meet its goal"
+    r: FundRaise = self.raises[_raiseId]
+    assert not r.ended, "Raise finished"
+    assert r.owner == msg.sender, "Not raise owner"
+    assert r.goal <= r.contributed, "Raise did not meet its goal"
     self.raises[_raiseId].ended = True
     raw_call(msg.sender, b'', value=self.raises[_raiseId].contributed)
 
 @external
 def withdrawContribution(_raiseId: uint256):
-    assert self.raises[_raiseId].deadline < block.timestamp, "Raise not over"
-    assert self.raises[_raiseId].contributed < self.raises[_raiseId].goal, "Raise met its goal"
+    r: FundRaise = self.raises[_raiseId]
+    assert r.deadline < block.timestamp, "Raise not over"
+    assert r.contributed < self.raises[_raiseId].goal, "Raise met its goal"
     assert self.contributors[msg.sender][_raiseId] > 0, "Nothing to withdraw"
     withdrawAmount: uint256 = self.contributors[msg.sender][_raiseId]
     self.contributors[msg.sender][_raiseId] = 0

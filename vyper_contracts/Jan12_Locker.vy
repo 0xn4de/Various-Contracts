@@ -47,20 +47,21 @@ def changeBeneficiary(_vestingId: uint256, _newBeneficiary: address):
 
 @external
 def withdraw(_vestingId: uint256):
-    assert msg.sender == self.vestingData[_vestingId].beneficiary, "Not the beneficiary"
-    assert not self.vestingData[_vestingId].withdrawn, "Already withdrawn"
-    assert block.timestamp >= self.vestingData[_vestingId].vestingEndTime, "Vesting period not over"
+    data: VestingInfo = self.vestingData[_vestingId]
+    assert msg.sender == data.beneficiary, "Not the beneficiary"
+    assert not data.withdrawn, "Already withdrawn"
+    assert block.timestamp >= data.vestingEndTime, "Vesting period not over"
     
     self.vestingData[_vestingId].withdrawn = True
     
-    token: address = self.vestingData[_vestingId].token
-    withdrawAmount: uint256 = self.vestingData[_vestingId].amount
+    token: address = data.token
+    withdrawAmount: uint256 = data.amount
     self.vestingData[_vestingId].amount = 0
 
     if token == empty(address):
         raw_call(msg.sender, b'', value=withdrawAmount)
     else:
-        ERC20(self.vestingData[_vestingId].token).transfer(msg.sender, withdrawAmount)
+        ERC20(data.token).transfer(msg.sender, withdrawAmount)
     log Withdraw(_vestingId, self.vestingData[_vestingId].token, self.vestingData[_vestingId].amount, msg.sender)
 
 
