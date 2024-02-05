@@ -43,8 +43,8 @@ contract LockerToken is ERC721 {
         }
 
         vestingData[vestingId] = VestingInfo(_token, _amount, vestingEndTime, false);
-        emit Deposit(vestingId, _token, _amount, vestingEndTime, _beneficiary);
         _safeMint(_beneficiary, vestingId);
+        emit Deposit(vestingId, _token, _amount, vestingEndTime, _beneficiary);
         return vestingId;
     }
 
