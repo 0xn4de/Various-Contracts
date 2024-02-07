@@ -20,6 +20,18 @@ event TradeCreated:
     nftToBuy: address
     tokensToBuy: uint256
     deadline: uint256
+event TradeCancelled:
+    tradeId: indexed(uint256)
+    creator: indexed(address)
+event TradeAccepted:
+    tradeId: indexed(uint256)
+    nft1: indexed(address)
+    nft2: indexed(address)
+    nft1Ids: DynArray[uint256, 64]
+    nft2Ids: DynArray[uint256, 64]
+    maker: address
+    taker: address
+
 
 @external
 def createTrade(nftToSell: address, tokensToSell: DynArray[uint256, 64], nftToBuy: address, tokensToBuy: uint256, deadline: uint256) -> uint256:
@@ -49,6 +61,7 @@ def acceptTrade(tradeId: uint256, tokensToSell: DynArray[uint256, 64]):
         ERC721(trade.nftToSell).safeTransferFrom(trade.maker, msg.sender, i, b'')
     for i in tokensToSell:
         ERC721(trade.nftToBuy).safeTransferFrom(msg.sender, trade.maker, i, b'')
+    log TradeAccepted(tradeId, trade.nftToSell, trade.nftToBuy, trade.tokensToSell, tokensToSell, trade.maker, msg.sender)
     
 
 @external
@@ -56,3 +69,4 @@ def cancelTrade(tradeId: uint256):
     assert msg.sender == self.trades[tradeId].maker, "You are not the creator of the trade"
     assert not self.trades[tradeId].filledOrCancelled, "Trade closed"
     self.trades[tradeId].filledOrCancelled = True
+    log TradeCancelled(tradeId, msg.sender)
