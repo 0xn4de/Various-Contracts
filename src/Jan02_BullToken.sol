@@ -10,6 +10,8 @@ contract BullToken is ERC20 {
     uint256 public lastUpdated;
     AggregatorV3Interface immutable priceFeed;
 
+    event PriceUpdated(int256 indexed newPrice, uint256 indexed timestamp);
+
     constructor(
         string memory name,
         string memory symbol,
@@ -22,16 +24,19 @@ contract BullToken is ERC20 {
         minPrice = getPrice();
         lastUpdated = block.timestamp;
     }
-    
-    function transfer(address to, uint256 amount) public virtual override returns (bool) {
-        balanceOf[msg.sender] -= amount;
+    function checkPrice() internal {
         int256 price = getPrice();
         if (block.timestamp > lastUpdated + 7 days) {
             minPrice = price;
             lastUpdated = block.timestamp;
+            emit PriceUpdated(price, block.timestamp);
         }
         require(price >= minPrice, "Price is too low");
-
+    }
+    
+    function transfer(address to, uint256 amount) public virtual override returns (bool) {
+        balanceOf[msg.sender] -= amount;
+        checkPrice();
 
         // Cannot overflow because the sum of all user
         // balances can't exceed the max uint256 value.
@@ -49,12 +54,7 @@ contract BullToken is ERC20 {
         address to,
         uint256 amount
     ) public virtual override returns (bool) {
-        int256 price = getPrice();
-        if (block.timestamp > lastUpdated + 7 days) {
-            minPrice = price;
-            lastUpdated = block.timestamp;
-        }
-        require(price >= minPrice, "Price is too low");
+        checkPrice();
         return super.transferFrom(from, to, amount);
     }
     function getPrice() public view returns (int) {
