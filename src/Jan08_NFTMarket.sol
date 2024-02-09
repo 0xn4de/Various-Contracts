@@ -20,6 +20,8 @@ contract NFTMarket {
     mapping (uint256 => Trade) public trades;
 
     event TradeCreated(address nftToSell, uint256[] tokensToSell, address nftToBuy, uint256 tokensToBuy, uint32 deadline);
+    event TradeCancelled(uint256 indexed tradeId, address indexed creator);
+    event TradeAccepted(uint256 indexed tradeId, address indexed nft1, address indexed nft2, uint256[] nft1Ids, uint256[] nft2Ids, address maker, address taker);
 
     function createTrade(address nftToSell, uint256[] calldata tokensToSell, address nftToBuy, uint256 tokensToBuy, uint32 deadline) public returns (uint256) {
         require(deadline > block.timestamp, "Deadline is in the past");
@@ -42,12 +44,14 @@ contract NFTMarket {
         for (uint256 i = 0; i < tokensToSell.length; i++) {
             ERC721(trade.nftToBuy).safeTransferFrom(msg.sender, trade.maker, tokensToSell[i]);
         }
+        emit TradeAccepted(tradeId, trade.nftToSell, trade.nftToBuy, trade.tokensToSell, tokensToSell, trade.maker, msg.sender);
     }
     function cancelTrade(uint256 tradeId) public {
         Trade storage trade = trades[tradeId];
         require(msg.sender == trade.maker, "You are not the creator of the trade");
         require(!trade.filledOrCancelled, "Trade closed");
         trade.filledOrCancelled = true;
+        emit TradeCancelled(tradeId, msg.sender);
     }
 
 }

@@ -21,6 +21,9 @@ event TradeCreated:
     assetToBuy: address
     amountToBuy: uint256
     deadline: uint256
+event TradeCancelled:
+    tradeId: indexed(uint256)
+    creator: indexed(address)
 
 @external
 @payable
@@ -73,3 +76,4 @@ def cancelTrade(tradeId: uint256):
     self.trades[tradeId].filledOrCancelled = True
     if trade.assetToSell == empty(address):
         raw_call(msg.sender, b'', value=trade.amountToSell)
+    log TradeCancelled(tradeId, msg.sender)

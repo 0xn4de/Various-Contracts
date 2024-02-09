@@ -19,6 +19,7 @@ contract Market {
     mapping (uint256 => Trade) public trades;
 
     event TradeCreated(address assetToSell, uint256 amountToSell, address assetToBuy, uint256 amountToBuy, uint32 deadline);
+    event TradeCancelled(uint256 indexed tradeId, address indexed creator);
 
     function createTrade(address assetToSell, uint256 amountToSell, address assetToBuy, uint256 amountToBuy, uint32 deadline) public payable returns (uint256) {
         require(deadline > block.timestamp, "Deadline is in the past");
@@ -66,6 +67,7 @@ contract Market {
         if (trade.assetToSell == address(0)) {
             SafeTransferLib.safeTransferETH(msg.sender, trade.amountToSell);
         }
+        emit TradeCancelled(tradeId, msg.sender);
     }
 
 }
