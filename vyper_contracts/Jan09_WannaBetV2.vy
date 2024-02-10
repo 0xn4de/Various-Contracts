@@ -42,7 +42,12 @@ event betSettled:
     amount1: uint256
     token2: address
     amount2: uint256
-
+event betClosed:
+    betId: indexed(uint256)
+    maker: indexed(address)
+event betAccepted:
+    betId: indexed(uint256)
+    taker: indexed(address)
 @external
 def initialize(_base: address, _quote: address, _registry: FeedRegistryInterface):
     assert not self.initialized
@@ -85,6 +90,7 @@ def acceptBet(betId: uint256):
     else:
         ERC20(bet.tokenData.takerAsset).transferFrom(msg.sender, self, bet.tokenData.takerBet)
     self.bets[betId].taker = msg.sender
+    log betAccepted(betId, msg.sender)
 
 @external
 def settleBet(betId: uint256):
@@ -120,7 +126,7 @@ def closeBet(betId: uint256):
         raw_call(bet.maker, b'', value=bet.tokenData.makerBet)
     else:
         ERC20(bet.tokenData.makerAsset).transfer(bet.maker, bet.tokenData.makerBet)
-
+    log betClosed(betId, msg.sender)
 @internal
 @view
 def getPrice() -> int256:

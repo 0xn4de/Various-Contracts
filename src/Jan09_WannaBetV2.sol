@@ -37,6 +37,8 @@ contract WannaBetV2 {
 
     event betCreated(address indexed maker, int256 indexed price, uint256 indexed betId, BetTokenData tokenData, uint256 ends, uint256 takerDeadline, Side side);
     event betSettled(address indexed winner, uint256 indexed betId, address token1, uint256 amount1, address token2, uint256 amount2);
+    event betClosed(uint256 indexed betId, address indexed maker);
+    event betAccepted(uint256 indexed betId, address indexed taker);
     
     constructor(address _base, address _quote, FeedRegistryInterface _registry) {
         registry = _registry;
@@ -68,6 +70,7 @@ contract WannaBetV2 {
             ERC20(bet.tokenData.takerAsset).safeTransferFrom(msg.sender, address(this), bet.tokenData.takerBet);
         }
         bet.taker = msg.sender;
+        emit betAccepted(betId, msg.sender);
     }
     function settleBet(uint256 betId) external {
         BetData storage bet = bets[betId];
@@ -108,6 +111,7 @@ contract WannaBetV2 {
         } else {
             ERC20(bet.tokenData.makerAsset).safeTransfer(bet.maker, bet.tokenData.makerBet);
         }
+        emit betClosed(betId, msg.sender);
     }
     function getPrice() public view returns (int) {
         (,int price,,,) = registry.latestRoundData(base, quote);
