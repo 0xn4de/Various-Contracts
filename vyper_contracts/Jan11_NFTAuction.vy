@@ -37,13 +37,23 @@ totalAuctions: public(uint256)
 
 auctions: public(HashMap[uint256, Auction])
 
-event auctionCreated:
+event AuctionCreated:
     nft: address
     tokenId: uint256
     reserve: uint256
     minRaise: uint256
     buyNow: uint256
     deadline: uint256
+event AuctionSettled:
+    auctionId: indexed(uint256)
+    buyer: indexed(address)
+    bidAmount: indexed(uint256)
+event Bid:
+    auctionId: indexed(uint256)
+    bidder: indexed(address)
+    bidAmount: indexed(uint256)
+event AuctionClosed:
+    auctionId: indexed(uint256)
 
 
 @external
@@ -74,7 +84,7 @@ def createAuction(nft: address, tokenId: uint256, nftType: uint8, reserve: uint2
         currentBid: 0,
         deadline: block.timestamp+auctionLength
     })
-    log auctionCreated(nft, tokenId, reserve, minRaise, buyNow, block.timestamp+auctionLength)
+    log AuctionCreated(nft, tokenId, reserve, minRaise, buyNow, block.timestamp+auctionLength)
     return self.totalAuctions
 
 @external
@@ -102,6 +112,7 @@ def bid(auctionId: uint256) -> bool:
         else:
             ERC6909(auction.nft).transferFrom(self, msg.sender, auction.tokenId, 1)
         raw_call(auction.maker, b'', value=msg.value)
+        log AuctionSettled(auctionId, msg.sender, msg.value)
         return True
     return True
 
@@ -120,7 +131,8 @@ def settleAuction(auctionId: uint256):
             ERC6909(auction.nft).transfer(auction.currentBidder, auction.tokenId, 1)
         raw_call(auction.maker, b'', value=lastBid)
     else:
-        raw_call(auction.currentBidder, b'', value=lastBid)   
+        raw_call(auction.currentBidder, b'', value=lastBid)
+    log AuctionSettled(auctionId, auction.currentBidder, lastBid)
 
 @external
 def cancelAuction(auctionId: uint256):
@@ -135,6 +147,7 @@ def cancelAuction(auctionId: uint256):
     
     if auction.currentBidder != empty(address):
         raw_call(auction.currentBidder, b'', value=auction.currentBid)
+    log AuctionClosed(auctionId)
 
 @external
 def onERC721Received(_operator: address, _from: address, _tokenId: uint256, _data: Bytes[1024]) -> bytes4:

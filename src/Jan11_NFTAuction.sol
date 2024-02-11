@@ -25,7 +25,10 @@ contract NFTAuction is ERC721TokenReceiver {
     uint256 totalAuctions;
     mapping (uint256 => Auction) public auctions;
 
-    event auctionCreated(address nft, uint256 tokenId, uint256 reserve, uint256 minRaise, uint256 buyNow, uint256 deadline);
+    event AuctionCreated(address nft, uint256 tokenId, uint256 reserve, uint256 minRaise, uint256 buyNow, uint256 deadline);
+    event AuctionSettled(uint256 indexed auctionId, address indexed buyer, uint256 indexed bidAmount);
+    event Bid(uint256 indexed auctionId, address indexed bidder, uint256 indexed bidAmount);
+    event AuctionClosed(uint256 indexed auctionId);
 
     function createAuction(address nft, uint256 tokenId, NFT nftType, uint256 reserve, uint256 minRaise, uint256 buyNow, uint256 auctionLength) external returns (uint256) {
         if (buyNow > 0) { // sometimes no buy now
@@ -39,7 +42,7 @@ contract NFTAuction is ERC721TokenReceiver {
             ERC6909(nft).transferFrom(msg.sender, address(this), tokenId, 1);
         }
         auctions[auctionId] = Auction(false, nftType, msg.sender, address(0), nft, tokenId, reserve, minRaise, buyNow, 0, block.timestamp+auctionLength);
-        emit auctionCreated(nft, tokenId, reserve, minRaise, buyNow, block.timestamp+auctionLength);
+        emit AuctionCreated(nft, tokenId, reserve, minRaise, buyNow, block.timestamp+auctionLength);
         return auctionId;
     }
 
@@ -67,8 +70,10 @@ contract NFTAuction is ERC721TokenReceiver {
                 ERC6909(auction.nft).transferFrom(address(this), msg.sender, auction.tokenId, 1);
             }
             SafeTransferLib.safeTransferETH(auction.maker, msg.value);
+            emit AuctionSettled(auctionId, msg.sender, msg.value);
             return true;
         }
+        emit Bid(auctionId, msg.sender, msg.value);
         return true;
     }
     function settleAuction(uint256 auctionId) external {
@@ -88,6 +93,7 @@ contract NFTAuction is ERC721TokenReceiver {
         } else {
             SafeTransferLib.safeTransferETH(auction.currentBidder, lastBid);
         }
+        emit AuctionSettled(auctionId, auction.currentBidder, lastBid);
 
     }
     function cancelAuction(uint256 auctionId) external {
@@ -104,5 +110,6 @@ contract NFTAuction is ERC721TokenReceiver {
         if (auction.currentBidder != address(0)) {
             SafeTransferLib.safeTransferETH(auction.maker, auction.currentBid);
         }
+        emit AuctionClosed(auctionId);
     }
 }
