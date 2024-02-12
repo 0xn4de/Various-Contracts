@@ -29,6 +29,9 @@ event betSettled:
 event betClosed:
     maker: indexed(address)
     betId: indexed(uint256)
+event betAccepted:
+    taker: indexed(address)
+    betId: indexed(uint256)
 
 priceFeed: public(AggregatorV3Interface)
 wagers: public(uint256)
@@ -86,6 +89,7 @@ def acceptBet(betId: uint256):
     assert bet.taker == empty(address), "Someone already bet"
     assert bet.takerBet == msg.value, "You bet too little/too much"
     self.bets[betId].taker = msg.sender
+    log betAccepted(msg.sender, betId)
 
 @external
 def settleBet(betId: uint256):

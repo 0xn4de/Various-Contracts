@@ -25,6 +25,7 @@ contract WannaBet {
     event betCreated(address indexed maker, int256 indexed price, uint256 indexed betId, uint256 ends, uint256 takerDeadline, uint256 takerBet, Side side);
     event betSettled(address indexed winner, uint256 indexed pot, uint256 indexed betId);
     event betClosed(address indexed maker, uint256 indexed betId);
+    event betAccepted(address indexed taker, uint256 indexed betId);
     constructor(address _priceFeed) {
         priceFeed = AggregatorV3Interface(_priceFeed);
     }
@@ -43,6 +44,7 @@ contract WannaBet {
         require(bet.taker == address(0), "Someone already bet");
         require(bet.takerBet == msg.value, "You bet too little/too much");
         bet.taker = msg.sender;
+        emit betAccepted(msg.sender, betId);
     }
     function settleBet(uint256 betId) external {
         BetData storage bet = bets[betId];
