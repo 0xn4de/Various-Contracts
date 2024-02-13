@@ -21,9 +21,7 @@ contract LockerTest is Test {
         alice = makeAddr("alice");
         bob = makeAddr("bob");
         charlie = makeAddr("charlie");
-        vm.deal(alice, 10 ether);
         vm.deal(bob, 10 ether);
-        vm.deal(charlie, 10 ether);
         deal(address(usdc), bob, 10000*1e6);
         vm.prank(bob);
         usdc.approve(address(locker), type(uint256).max);

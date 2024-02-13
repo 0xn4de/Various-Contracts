@@ -26,12 +26,9 @@ contract WannaBetV2Test is Test {
         vm.deal(charlie, 10 ether);
         deal(address(usdc), alice, 10000*1e6);
         deal(address(usdc), bob, 10000*1e6);
-        deal(address(usdc), charlie, 10000*1e6);
         vm.prank(alice);
         usdc.approve(address(betContract), type(uint256).max);
         vm.prank(bob);
-        usdc.approve(address(betContract), type(uint256).max);
-        vm.prank(charlie);
         usdc.approve(address(betContract), type(uint256).max);
         vm.makePersistent(address(usdc));
         
