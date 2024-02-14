@@ -16,6 +16,7 @@ contract FreeForAll1155Test is Test {
         nft = new FreeForAll1155();
         alice = makeAddr("alice");
         bob = makeAddr("bob");
+        nft.mintTo(address(bob), 0);
     }
 
     function test_correctStartTime() public {
@@ -23,14 +24,12 @@ contract FreeForAll1155Test is Test {
     }
 
     function test_ffaNotEnabledTransferRevert() public {
-        nft.mintTo(address(bob), 0);
         vm.prank(alice);
         // Expect revert as FFA not enabled and alice isn't approved
         vm.expectRevert("NOT_AUTHORIZED");
         nft.safeTransferFrom(bob, alice, 0, 1, "");
     }
     function test_ffaEnabledTransfer() public {
-        nft.mintTo(address(bob), 0);
         vm.warp(block.timestamp + 1 days + 1 seconds); // Go to where FFA is enabled
         vm.prank(alice);
         nft.safeTransferFrom(bob, alice, 0, 1, "");
@@ -38,7 +37,6 @@ contract FreeForAll1155Test is Test {
     }
     function test_ffaStartTimeChange() public {
         uint256 beforeStartTime = nft.startTime();
-        nft.mintTo(address(bob), 0);
         vm.warp(block.timestamp + 1 days + 1 hours + 1 seconds); // Go to where FFA is disabled
         vm.prank(bob);
         nft.safeTransferFrom(bob, alice, 0, 1, "");
@@ -49,7 +47,6 @@ contract FreeForAll1155Test is Test {
     // Similar way of getting it done if its over 25 hours, but needs more transferFroms
     function test_newFFAPeriodWithNoTransfers() public {
         uint256 beforeStartTime = nft.startTime();
-        nft.mintTo(address(bob), 0);
         vm.warp(block.timestamp + 2 days + 1 seconds); // Go to where FFA is enabled
         vm.prank(bob);
         // Even though it's FFA period right now (24h since last one), startTime is a day behind
@@ -59,7 +56,7 @@ contract FreeForAll1155Test is Test {
         nft.safeTransferFrom(alice, bob, 0, 1, ""); // Bob can take his nft back because FFA is on
     }
     function test_maxSupplyRevert() public {
-        for (uint256 i = 0; i < 100; i++) {
+        for (uint256 i = 0; i < 99; i++) {
             nft.mintTo(address(bob), 0);
         }
         vm.expectRevert("No supply available");
