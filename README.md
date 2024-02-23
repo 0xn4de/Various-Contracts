@@ -8,7 +8,7 @@ I've also started adding Vyper versions of contracts (ran out of ideas), those a
 
 Same tests work for both Vyper & Solidity (where possible) with small modifications, Vyper tests are in test/vyper_tests/
 
-**If you have any ideas or questions, please hit me up on** [Twitter](https://twitter.com/0xf4d3)!
+**If you have any ideas (desperately need some) or questions, please hit me up on** [Twitter](https://twitter.com/0xf4d3)!
 
 This repository uses [Foundry](https://book.getfoundry.sh/)
 
