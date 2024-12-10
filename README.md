@@ -91,6 +91,12 @@ This repository uses [Foundry](https://book.getfoundry.sh/)
   - Difference is that beneficiary is tracked through ownership of an ERC721 id that corresponds to the vesting data
   - Transfer the ERC721 to another address to change beneficiary
   - Token gets minted on deposit, burned on withdraw
+- [Contest](./src/Contest.sol)
+  - Modeled (slightly) after [this problem](https://twitter.com/CleanPegasus/status/1805634062356242619)
+  - Contract starts with a blockDifference and a minBid
+  - Every player will put in a minBid and become the last caller, at the block number in which they called
+  - After blockDifference amount of blocks, the last caller can withdraw the contract's balance
+  - Game (should) be able to be continued in perpetuity, e.g. after `end()` is called a new person can call `bid()`
 
 </details>
 
