@@ -20,6 +20,7 @@ contract WannaBetTest is Test {
         vm.deal(alice, 10 ether);
         vm.deal(bob, 10 ether);
         vm.deal(charlie, 10 ether);
+        vm.makePersistent(address(betContract), alice, bob);
     }
     function test_wagerCreateReverts() public {
         vm.prank(bob);
@@ -78,7 +79,7 @@ contract WannaBetTest is Test {
         vm.rollFork(18850000); // ETH Price 2292.91807
         betContract.settleBet(betId); // Settle bet after it has ended, subject to ETH price at time of settling
 
-        assertEq(address(bob).balance, 11 ether);
+        assertEq(bob.balance, 11 ether);
     }
     function test_WagerLoss() public {
 
@@ -91,8 +92,8 @@ contract WannaBetTest is Test {
         vm.rollFork(18850000); // ETH Price 2292.91807
         betContract.settleBet(betId); // Settle bet after it has ended, subject to ETH price at time of settling
 
-        assertEq(address(bob).balance, 9 ether);
-        assertEq(address(alice).balance, 11 ether);
+        assertEq(bob.balance, 9 ether);
+        assertEq(alice.balance, 11 ether);
     }
     function test_WagerLoss2() public {
 
@@ -105,8 +106,8 @@ contract WannaBetTest is Test {
         vm.rollFork(18841000); // ETH Price 2303.7560007
         betContract.settleBet(betId); // Settle bet after it has ended, subject to ETH price at time of settling
 
-        assertEq(address(bob).balance, 9 ether);
-        assertEq(address(alice).balance, 11 ether);
+        assertEq(bob.balance, 9 ether);
+        assertEq(alice.balance, 11 ether);
     }
 
     function test_createAndClose() public {
@@ -114,9 +115,9 @@ contract WannaBetTest is Test {
         // Bob bets that 1 ETH that ETH is over 2280 USDC in 5 days, with a maximum time to accept bet of 2 days, settles in 5 days
         uint256 betId = betContract.createBet{value: 1 ether}(2280*1e8, Side.OVER, block.timestamp + 5 days, block.timestamp + 2 days, 1 ether);
         vm.warp(block.timestamp + 2.01 days);
-        assertEq(address(bob).balance, 9 ether);
+        assertEq(bob.balance, 9 ether);
         betContract.closeBet(betId);
-        assertEq(address(bob).balance, 10 ether); // Funds get returned
+        assertEq(bob.balance, 10 ether); // Funds get returned
 
         // Closing again reverts since bet closed
         vm.expectRevert("Bet closed/settled");
@@ -140,7 +141,7 @@ contract WannaBetTest is Test {
         // Try to close bet, timestamp fits but bet was accepted
         vm.expectRevert("Bet already accepted");
         betContract.closeBet(betId);
-        assertEq(address(bob).balance, 9 ether); // Funds don't get returned
+        assertEq(bob.balance, 9 ether); // Funds don't get returned
     }
     function test_getChainlinkPrice() public {
         int256 price = betContract.getPrice();

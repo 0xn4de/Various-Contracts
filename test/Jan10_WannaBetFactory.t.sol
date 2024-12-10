@@ -19,6 +19,7 @@ contract WannaBetFactoryTest is Test {
         bob = makeAddr("bob");
         vm.deal(alice, 10 ether);
         vm.deal(bob, 10 ether);
+        vm.makePersistent(bob, address(factory));
     }
 
     function testDeployPool() public {

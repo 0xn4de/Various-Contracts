@@ -30,7 +30,9 @@ contract WannaBetV2Test is Test {
         usdc.approve(address(betContract), type(uint256).max);
         vm.prank(bob);
         usdc.approve(address(betContract), type(uint256).max);
-        vm.makePersistent(address(usdc));
+        
+        vm.makePersistent(address(usdc), alice, bob);
+        vm.makePersistent(address(betContract));
         
     }
     function test_wagerCreateReverts() public {
